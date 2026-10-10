@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pat Tattoo | Minimalistyczny Tatuaż Fineline & Piercing | Nowy Sącz</title>
+  <meta name="description" content="Autorskie studio tatuażu fineline, mikrotatuażu, kaligrafii oraz profesjonalnego piercingu w Nowym Sączu. Ul. Lwowska 38/3. Umów wizytę online 24/7.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#09090b',
+              charcoal: '#18181b',
+              gray: '#71717a',
+              light: '#fafafa',
+              border: '#e4e4e7',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['Syne', '"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white text-zinc-900 selection:bg-zinc-900 selection:text-white relative">
+
+  <!-- Ambient Mist Canvas (Rozpraszająca się mgła w tle) -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <div class="content-wrapper min-h-screen flex flex-col justify-between">
+    
+    <!-- MAIN SITE VIEW -->
+    <div id="main-view-container">
+
+      <!-- =================================================================
+           1. DEMO BAR (Górny pasek demonstracyjny z kontaktem i panelem)
+           ================================================================= -->
+      <div id="demo-bar" class="w-full bg-zinc-900 text-zinc-100 text-xs py-2 px-4 border-b border-zinc-800 z-50 relative">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-medium tracking-wide">Wersja Demonstracyjna • Pat Tattoo (Nowy Sącz)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="openDemoContactModal()" class="text-zinc-300 hover:text-white transition-colors underline underline-offset-2 font-medium">
+              Skontaktuj się w sprawie strony
+            </button>
+            <span class="text-zinc-600">|</span>
+            <a href="#admin" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-white font-medium transition-all text-xs flex items-center gap-1.5 border border-zinc-700">
+              <i class="fa-solid fa-lock text-[10px]"></i> Panel Studia
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================
+           2. STICKY NAVBAR
+           ================================================================= -->
+      <header id="navbar" class="sticky top-0 w-full z-40 bg-white/85 backdrop-blur-md border-b border-zinc-200/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          
+          <!-- Logo -->
+          <a href="#" class="flex items-center gap-3 group">
+            <img src="logo.png" alt="Pat Tattoo Logo" class="w-12 h-12 rounded-full object-cover border border-zinc-300/80 group-hover:scale-105 transition-transform duration-300">
+            <div class="flex flex-col">
+              <span class="font-heading font-semibold text-xl tracking-tight text-zinc-900 group-hover:text-black">Pat Tattoo</span>
+              <span class="text-[11px] font-normal uppercase tracking-widest text-zinc-500">Nowy Sącz</span>
+            </div>
+          </a>
+
+          <!-- Desktop Navigation -->
+          <nav class="hidden lg:flex items-center gap-7 text-sm font-normal text-zinc-700">
+            <a href="#about" class="nav-link hover:text-zinc-950">O Studiu</a>
+            <a href="#services" class="nav-link hover:text-zinc-950">Style & Usługi</a>
+            <a href="#benefits" class="nav-link hover:text-zinc-950">Dlaczego Strona</a>
+            <a href="#portfolio" class="nav-link hover:text-zinc-950">Portfolio</a>
+            <a href="#rezerwacja" class="nav-link hover:text-zinc-950">Rezerwacja</a>
+            <a href="#testimonials" class="nav-link hover:text-zinc-950">Opinie</a>
+            <a href="#faq" class="nav-link hover:text-zinc-950">FAQ</a>
+            <a href="#contact" class="nav-link hover:text-zinc-950">Kontakt</a>
+          </nav>
+
+          <!-- Desktop CTA & Phone -->
+          <div class="hidden lg:flex items-center gap-4">
+            <a href="tel:575868494" class="text-xs font-medium text-zinc-800 hover:text-black flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-zinc-100 transition-colors">
+              <i class="fa-solid fa-phone text-zinc-600 text-xs"></i> 575 868 494
+            </a>
+            <a href="#rezerwacja" class="px-5 py-2.5 rounded-full bg-zinc-900 text-white text-xs font-medium tracking-wide hover:bg-zinc-800 transition-all shadow-sm hover:shadow hover:-translate-y-0.5">
+              Zarezerwuj Wizytę
+            </a>
+          </div>
+
+          <!-- Mobile Hamburger Button (W prawym górnym rogu na telefonie) -->
+          <button id="mobile-menu-btn" type="button" onclick="toggleMobileMenu()" aria-label="Menu" class="lg:hidden p-2.5 rounded-xl border border-zinc-200 text-zinc-800 hover:bg-zinc-100 transition-colors flex items-center justify-center w-11 h-11">
+            <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-drawer" class="hidden lg:hidden border-b border-zinc-200 bg-white/98 backdrop-blur-xl px-6 py-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-zinc-100">
+            <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Nawigacja</span>
+            <button id="close-drawer-btn" type="button" class="text-zinc-500 hover:text-black text-sm">
+              <i class="fa-solid fa-xmark"></i> Zamknij
+            </button>
+          </div>
+          <div class="flex flex-col space-y-3 text-base font-normal text-zinc-800">
+            <a href="#about" class="drawer-link hover:text-black">O Studiu</a>
+            <a href="#services" class="drawer-link hover:text-black">Style & Usługi</a>
+            <a href="#benefits" class="drawer-link hover:text-black">Dlaczego Strona</a>
+            <a href="#portfolio" class="drawer-link hover:text-black">Portfolio</a>
+            <a href="#rezerwacja" class="drawer-link hover:text-black">Rezerwacja Online</a>
+            <a href="#testimonials" class="drawer-link hover:text-black">Opinie Klientek</a>
+            <a href="#faq" class="drawer-link hover:text-black">FAQ</a>
+            <a href="#contact" class="drawer-link hover:text-black">Kontakt</a>
+          </div>
+          <div class="pt-4 border-t border-zinc-100 flex flex-col gap-3">
+            <a href="tel:575868494" class="w-full py-2.5 rounded-xl border border-zinc-200 text-center text-sm font-medium text-zinc-800 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-phone text-xs"></i> 575 868 494
+            </a>
+            <a href="#rezerwacja" class="drawer-link w-full py-3 rounded-xl bg-zinc-900 text-white text-center text-sm font-medium">
+              Zarezerwuj Wizytę Online
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <!-- =================================================================
+           3. HERO SECTION
+           ================================================================= -->
+      <section class="relative pt-16 pb-20 sm:pt-24 sm:pb-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="max-w-3xl mx-auto text-center space-y-6 fade-up">
+            
+            <!-- Category Tag -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-200 bg-white/80 shadow-xs text-xs font-normal tracking-wider uppercase text-zinc-600">
+              <span class="w-1.5 h-1.5 rounded-full bg-zinc-900"></span>
+              Studio Tatuażu Fineline & Piercingu • Nowy Sącz
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-light font-heading tracking-tight text-zinc-900 leading-[1.15]">
+              Sztuka delikatnej linii i precyzji w Nowym Sączu
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-base sm:text-lg text-zinc-600 font-light leading-relaxed max-w-2xl mx-auto">
+              Minimalistyczny tatuaż fineline, lekka botanika, wyrazisty lettering oraz bezpieczny profesjonalny piercing. Każdy wzór tworzymy z troską o mikrodetał, idealne proporcje i przyjazną atmosferę.
+            </p>
+
+            <!-- Buttons -->
+            <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+              <a href="#rezerwacja" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-medium tracking-wide shadow-sm hover:shadow-md transition-all text-center">
+                Zarezerwuj Sesję Online <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+              </a>
+              <a href="#portfolio" class="w-full sm:w-auto px-8 py-3.5 rounded-full border border-zinc-300 hover:border-zinc-900 bg-white/70 hover:bg-white text-zinc-800 text-sm font-normal transition-all text-center">
+                Zobacz Portfolio Prac
+              </a>
+            </div>
+
+          </div>
+
+          <!-- 4 Trust Badges (Cards responsive, overflow-hidden) -->
+          <div class="mt-16 sm:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            
+            <div class="card-clean rounded-2xl p-5 sm:p-6 text-center overflow-hidden fade-up">
+              <div class="text-zinc-400 mb-2"><i class="fa-solid fa-star text-amber-500 text-sm"></i></div>
+              <div class="text-2xl sm:text-3xl font-heading font-light text-zinc-900">5.0 ★</div>
+              <div class="text-xs uppercase tracking-wider text-zinc-500 mt-1">93 opinie w Google</div>
+              <div class="text-[11px] text-zinc-400 mt-1">100% zadowolonych klientek</div>
+            </div>
+
+            <div class="card-clean rounded-2xl p-5 sm:p-6 text-center overflow-hidden fade-up">
+              <div class="text-zinc-400 mb-2"><i class="fa-solid fa-location-dot text-zinc-700 text-sm"></i></div>
+              <div class="text-2xl sm:text-3xl font-heading font-light text-zinc-900">Lwowska 38/3</div>
+              <div class="text-xs uppercase tracking-wider text-zinc-500 mt-1">Nowy Sącz</div>
+              <div class="text-[11px] text-zinc-400 mt-1">Ścisłe centrum miasta</div>
+            </div>
+
+            <div class="card-clean rounded-2xl p-5 sm:p-6 text-center overflow-hidden fade-up">
+              <div class="text-zinc-400 mb-2"><i class="fa-solid fa-wand-magic-sparkles text-zinc-700 text-sm"></i></div>
+              <div class="text-2xl sm:text-3xl font-heading font-light text-zinc-900">Fineline & Piercing</div>
+              <div class="text-xs uppercase tracking-wider text-zinc-500 mt-1">Autorskie projekty</div>
+              <div class="text-[11px] text-zinc-400 mt-1">Igły 1RL & tytan medyczny</div>
+            </div>
+
+            <div class="card-clean rounded-2xl p-5 sm:p-6 text-center overflow-hidden fade-up">
+              <div class="text-zinc-400 mb-2"><i class="fa-solid fa-calendar-check text-zinc-700 text-sm"></i></div>
+              <div class="text-2xl sm:text-3xl font-heading font-light text-zinc-900">Kalendarz 24/7</div>
+              <div class="text-xs uppercase tracking-wider text-zinc-500 mt-1">Wygodna rezerwacja</div>
+              <div class="text-[11px] text-zinc-400 mt-1">Wybór terminu od ręki</div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           4. O STUDIU (ABOUT SECTION)
+           ================================================================= -->
+      <section id="about" class="py-20 sm:py-24 border-t border-zinc-100 bg-zinc-50/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Info -->
+            <div class="lg:col-span-7 space-y-6 fade-up">
+              <div class="inline-block text-xs uppercase tracking-widest font-medium text-zinc-500">
+                O studiu Pat Tattoo
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900 leading-tight">
+                Przestrzeń, w której estetyka spotyka się z pełnym komfortem
+              </h2>
+              <p class="text-zinc-600 font-light leading-relaxed">
+                <strong>Pat Tattoo</strong> to autorska pracownia w Nowym Sączu stworzona z miłości do subtelnych, lekkich tatuaży i bezpiecznego piercingu. Patrycja z dbałością o każdy detal przekłada Wasze emocje, sentencje i symbole na skórę, dbając o bezbolesny i bezstresowy przebieg każdej wizyty.
+              </p>
+              <p class="text-zinc-600 font-light leading-relaxed">
+                Stawiamy na absolutną higienę na poziomie medycznym, jednorazowe kartridże z najcieńszymi igłami oraz biżuterię tytanową najwyższej próby G23. Każdy projekt dopasowujemy indywidualnie do Twojej sylwetki.
+              </p>
+
+              <!-- Mini Features -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div class="p-4 rounded-xl border border-zinc-200 bg-white">
+                  <div class="font-medium text-zinc-900 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-check text-xs text-zinc-800"></i> Medyczna sterylność
+                  </div>
+                  <p class="text-xs text-zinc-500 mt-1 font-light">Najwyższe standardy sanitarno-epidemiologiczne i sterylne pakiety.</p>
+                </div>
+                <div class="p-4 rounded-xl border border-zinc-200 bg-white">
+                  <div class="font-medium text-zinc-900 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-check text-xs text-zinc-800"></i> Przyjazna atmosfera
+                  </div>
+                  <p class="text-xs text-zinc-500 mt-1 font-light">Spokojna rozmowa, doradztwo i pełen komfort psychiczny podczas sesji.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Studio Card -->
+            <div class="lg:col-span-5 fade-up">
+              <div class="card-clean rounded-3xl p-7 sm:p-8 space-y-6">
+                
+                <div class="flex items-center gap-4 pb-6 border-b border-zinc-100">
+                  <img src="logo.png" alt="Pat Tattoo Logo" class="w-16 h-16 rounded-2xl object-cover border border-zinc-200">
+                  <div>
+                    <h3 class="font-heading font-medium text-lg text-zinc-900">Pat Tattoo</h3>
+                    <p class="text-xs text-zinc-500">Tatuatorka & Piercerka Patrycja</p>
+                  </div>
+                </div>
+
+                <!-- Info List -->
+                <div class="space-y-4 text-sm font-light">
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-700 shrink-0 mt-0.5">
+                      <i class="fa-solid fa-location-dot text-xs"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-zinc-400">Adres studia</div>
+                      <div class="text-zinc-900 font-normal">ul. Lwowska 38/3, 33-300 Nowy Sącz</div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-700 shrink-0 mt-0.5">
+                      <i class="fa-solid fa-clock text-xs"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-zinc-400">Harmonogram pracy</div>
+                      <div class="text-zinc-900 font-normal">Poniedziałek – Piątek: 10:00 – 18:00</div>
+                      <div class="text-zinc-700 text-xs mt-0.5">Sobota: 10:00 – 14:00 • Niedziela: Zamknięte</div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-700 shrink-0 mt-0.5">
+                      <i class="fa-solid fa-phone text-xs"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-zinc-400">Telefon bezpośredni</div>
+                      <a href="tel:575868494" class="text-zinc-900 font-normal hover:underline">575 868 494</a>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-700 shrink-0 mt-0.5">
+                      <i class="fa-solid fa-envelope text-xs"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-zinc-400">Adres e-mail</div>
+                      <a href="mailto:patpoczta64@gmail.com" class="text-zinc-900 font-normal hover:underline">patpoczta64@gmail.com</a>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-700 shrink-0 mt-0.5">
+                      <i class="fa-brands fa-instagram text-xs"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-zinc-400">Instagram</div>
+                      <a href="https://www.instagram.com/pat.tattooo/" target="_blank" rel="noopener noreferrer" class="text-zinc-900 font-normal hover:underline">@pat.tattooo</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-2">
+                  <a href="#rezerwacja" class="block w-full py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-center text-xs font-medium tracking-wide transition-all">
+                    Umów konsultację lub tatuaż
+                  </a>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           5. STYLE & USŁUGI (SERVICES SECTION)
+           ================================================================= -->
+      <section id="services" class="py-20 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="max-w-2xl mx-auto text-center space-y-3 mb-16 fade-up">
+            <span class="text-xs uppercase tracking-widest font-medium text-zinc-500">Oferta Studia</span>
+            <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900">
+              Style tatuażu & profesjonalny piercing
+            </h2>
+            <p class="text-sm text-zinc-600 font-light">
+              Poznaj techniki, w których się specjalizujemy. Każdy projekt realizowany jest w oparciu o autorskie szkice i dopasowanie anatomiczne.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Service 1: Fineline & Botanika -->
+            <div class="card-clean rounded-2xl p-7 space-y-4 fade-up">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-900 text-lg">
+                <i class="fa-solid fa-feather"></i>
+              </div>
+              <h3 class="font-heading text-lg font-medium text-zinc-900">Fineline & Botanika</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Niezwykle cienkie, zmysłowe linie wykonywane igłami 1RL. Polne kwiaty, lilie, róże, gałązki i kompozycje florystyczne, które zachwycają lekkością.
+              </p>
+              <div class="pt-2 text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
+                Kwiaty • Liście • Cienka igła
+              </div>
+            </div>
+
+            <!-- Service 2: Lettering & Kaligrafia -->
+            <div class="card-clean rounded-2xl p-7 space-y-4 fade-up">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-900 text-lg">
+                <i class="fa-solid fa-pen-nib"></i>
+              </div>
+              <h3 class="font-heading text-lg font-medium text-zinc-900">Lettering & Kaligrafia</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Płynne, autorskie napisy i sentencje. Zarówno minimalistyczne mikronapisy, jak i wyrazista, dynamiczna kaligrafia na udzie, żebrach czy ramionach.
+              </p>
+              <div class="pt-2 text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
+                Sentencje • Cytaty • Autorskie fonty
+              </div>
+            </div>
+
+            <!-- Service 3: Minimalizm & Mikrotatuaż -->
+            <div class="card-clean rounded-2xl p-7 space-y-4 fade-up">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-900 text-lg">
+                <i class="fa-solid fa-shapes"></i>
+              </div>
+              <h3 class="font-heading text-lg font-medium text-zinc-900">Minimalizm & Spine Tattoo</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Tatuaże wzdłuż linii kręgosłupa, kompozycje słońca, księżyca, mikrogwiazd oraz rocznicowe daty. Dyskretna elegancja w nowoczesnym wydaniu.
+              </p>
+              <div class="pt-2 text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
+                Kręgosłup • Słońce • Daty
+              </div>
+            </div>
+
+            <!-- Service 4: Profesjonalny Piercing -->
+            <div class="card-clean rounded-2xl p-7 space-y-4 fade-up">
+              <div class="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-900 text-lg">
+                <i class="fa-solid fa-ring"></i>
+              </div>
+              <h3 class="font-heading text-lg font-medium text-zinc-900">Profesjonalny Piercing</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Sterylne przekłucia uszu (Helix, Tragus, Conch, Lobe), nosa i ciała. Wykorzystujemy bezpieczną biżuterię z tytanu chirurgicznego G23 oraz pełne instrukcje pielęgnacji.
+              </p>
+              <div class="pt-2 text-[11px] uppercase tracking-wider text-zinc-400 font-medium">
+                Uszy • Nos • Tytan medyczny
+              </div>
+            </div>
+
+            <!-- Service 5: Konsultacja i Indywidualny Projekt -->
+            <div class="card-clean rounded-2xl p-7 space-y-4 md:col-span-2 lg:col-span-2 fade-up bg-zinc-900 text-white">
+              <div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-white text-lg">
+                <i class="fa-regular fa-comments"></i>
+              </div>
+              <h3 class="font-heading text-lg font-medium text-white">Konsultacja & Indywidualny Projekt</h3>
+              <p class="text-xs text-zinc-300 font-light leading-relaxed">
+                Nie wiesz, jaki rozmiar lub umiejscowienie wybrać? Zarezerwuj bezpłatną konsultację w studio lub online. Omówimy Twój pomysł, przymierzymy kalkę wzoru i odpowiemy na wszystkie pytania przed właściwą sesją.
+              </p>
+              <div class="pt-2 flex items-center gap-4">
+                <a href="#rezerwacja" class="text-xs font-medium text-white underline underline-offset-4 hover:text-zinc-200">
+                  Umów konsultację w formularzu →
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           6. DLACZEGO WARTO MIEĆ STRONĘ (BENEFITS SECTION)
+           ================================================================= -->
+      <section id="benefits" class="py-20 sm:py-24 border-t border-zinc-100 bg-zinc-50/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="max-w-2xl mx-auto text-center space-y-3 mb-16 fade-up">
+            <span class="text-xs uppercase tracking-widest font-medium text-zinc-500">Zalety Rozwiązania</span>
+            <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900">
+              Dlaczego nowoczesna strona ułatwia rezerwację?
+            </h2>
+            <p class="text-sm text-zinc-600 font-light">
+              Automatyzacja procesu zapisów to wygoda dla Ciebie oraz pełna przejrzystość harmonogramu studia.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div class="card-clean rounded-2xl p-6 space-y-3 fade-up">
+              <div class="text-zinc-900 text-xl"><i class="fa-regular fa-clock"></i></div>
+              <h3 class="font-heading font-medium text-base text-zinc-900">Zapisy 24/7 bez czekania</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Koniec z długim oczekiwaniem na odpowiedź w wiadomościach prywatnych na Instagramie. Wybierasz wolny termin o dowolnej porze.
+              </p>
+            </div>
+
+            <div class="card-clean rounded-2xl p-6 space-y-3 fade-up">
+              <div class="text-zinc-900 text-xl"><i class="fa-solid fa-images"></i></div>
+              <h3 class="font-heading font-medium text-base text-zinc-900">Wszystkie inspiracje w jednym miejscu</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Klientka załącza zdjęcie referencyjne, opisuje miejsce na ciele i koncepcję. Zero zagubionych zdjęć w skrzynce DM.
+              </p>
+            </div>
+
+            <div class="card-clean rounded-2xl p-6 space-y-3 fade-up">
+              <div class="text-zinc-900 text-xl"><i class="fa-solid fa-gem"></i></div>
+              <h3 class="font-heading font-medium text-base text-zinc-900">Wizerunek klasy Premium</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Elegancka, minimalistyczna wizytówka w bieli podkreśla prestiż Pat Tattoo i buduje natychmiastowe zaufanie nowych klientek.
+              </p>
+            </div>
+
+            <div class="card-clean rounded-2xl p-6 space-y-3 fade-up">
+              <div class="text-zinc-900 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
+              <h3 class="font-heading font-medium text-base text-zinc-900">Przejrzysty Panel Studia</h3>
+              <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                Tatuatorka posiada natychmiastowy wgląd w nadchodzące terminy, statusy wizyt oraz zdjęcia nadesłane przez klientów.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           7. PORTFOLIO & GALERIA (LIGHTBOX)
+           ================================================================= -->
+      <section id="portfolio" class="py-20 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="max-w-2xl mx-auto text-center space-y-3 mb-16 fade-up">
+            <span class="text-xs uppercase tracking-widest font-medium text-zinc-500">Galeria Prac</span>
+            <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900">
+              Autorskie realizacje z naszego studia
+            </h2>
+            <p class="text-sm text-zinc-600 font-light">
+              Kliknij dowolne zdjęcie, aby powiększyć je w pełnej rozdzielczości i poznać szczegóły projektu.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- Item 1 -->
+            <div class="portfolio-card group relative rounded-2xl overflow-hidden card-clean cursor-pointer fade-up" data-index="0">
+              <div class="aspect-[3/4] overflow-hidden bg-zinc-100">
+                <img src="portfolio-1.png" alt="Delikatna Lilia Fineline" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              </div>
+              <div class="p-4 space-y-1 bg-white">
+                <div class="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Fineline & Botanika</div>
+                <h3 class="font-heading font-medium text-sm text-zinc-900 group-hover:text-black">Delikatna Lilia & Daty</h3>
+                <p class="text-xs text-zinc-500 font-light truncate">Cienka igła 1RL i pamiątkowe cyfry 1976 / 1973</p>
+              </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="portfolio-card group relative rounded-2xl overflow-hidden card-clean cursor-pointer fade-up" data-index="1">
+              <div class="aspect-[3/4] overflow-hidden bg-zinc-100">
+                <img src="portfolio-2.png" alt="Lettering Autorski na Udzie" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              </div>
+              <div class="p-4 space-y-1 bg-white">
+                <div class="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Lettering & Kaligrafia</div>
+                <h3 class="font-heading font-medium text-sm text-zinc-900 group-hover:text-black">Dynamiczna Kaligrafia</h3>
+                <p class="text-xs text-zinc-500 font-light truncate">Kompozycja wielkoformatowa na udzie</p>
+              </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="portfolio-card group relative rounded-2xl overflow-hidden card-clean cursor-pointer fade-up" data-index="2">
+              <div class="aspect-[3/4] overflow-hidden bg-zinc-100">
+                <img src="portfolio-3.png" alt="Tatuaż wzdłuż kręgosłupa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              </div>
+              <div class="p-4 space-y-1 bg-white">
+                <div class="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Minimalizm & Spine</div>
+                <h3 class="font-heading font-medium text-sm text-zinc-900 group-hover:text-black">Simplicity is Strength</h3>
+                <p class="text-xs text-zinc-500 font-light truncate">Motywy celestialne wzdłuż kręgosłupa</p>
+              </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="portfolio-card group relative rounded-2xl overflow-hidden card-clean cursor-pointer fade-up" data-index="3">
+              <div class="aspect-[3/4] overflow-hidden bg-zinc-100">
+                <img src="portfolio-4.png" alt="Botaniczna Żarówka ze Słonecznikiem" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              </div>
+              <div class="p-4 space-y-1 bg-white">
+                <div class="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Botanika & Dotwork</div>
+                <h3 class="font-heading font-medium text-sm text-zinc-900 group-hover:text-black">Słonecznik & Pszczoła</h3>
+                <p class="text-xs text-zinc-500 font-light truncate">Koncepcyjna żarówka z miękkim cieniowaniem</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           8. INTERAKTYWNY KREATOR REZERWACJI (4-ETAPOWY WIZARD)
+           ================================================================= -->
+      <section id="rezerwacja" class="py-20 sm:py-24 border-t border-zinc-100 bg-zinc-50/50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center space-y-3 mb-12 fade-up">
+            <span class="text-xs uppercase tracking-widest font-medium text-zinc-500">Kreator Online</span>
+            <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900">
+              Zarezerwuj swój termin w Pat Tattoo
+            </h2>
+            <p class="text-sm text-zinc-600 font-light max-w-xl mx-auto">
+              Wybierz preferowany styl, zaznacz dogodną datę w kalendarzu i opisz swój pomysł w 4 prostych krokach.
+            </p>
+          </div>
+
+          <!-- Wizard Card -->
+          <div id="booking-card-main" class="card-clean rounded-3xl p-6 sm:p-10 shadow-sm fade-up">
+            
+            <!-- Step Indicators -->
+            <div class="flex items-center justify-between pb-8 mb-8 border-b border-zinc-100">
+              <div class="flex items-center gap-2">
+                <div id="indicator-step-1" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-black text-white border border-black transition-all">
+                  1
+                </div>
+                <span class="hidden sm:inline text-xs font-medium text-zinc-800">Styl & Pomysł</span>
+              </div>
+              <div class="h-0.5 flex-1 mx-2 sm:mx-4 bg-zinc-200"></div>
+              <div class="flex items-center gap-2">
+                <div id="indicator-step-2" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-neutral-100 text-neutral-500 border border-neutral-300 transition-all">
+                  2
+                </div>
+                <span class="hidden sm:inline text-xs font-medium text-zinc-800">Termin</span>
+              </div>
+              <div class="h-0.5 flex-1 mx-2 sm:mx-4 bg-zinc-200"></div>
+              <div class="flex items-center gap-2">
+                <div id="indicator-step-3" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-neutral-100 text-neutral-500 border border-neutral-300 transition-all">
+                  3
+                </div>
+                <span class="hidden sm:inline text-xs font-medium text-zinc-800">Kontakt</span>
+              </div>
+              <div class="h-0.5 flex-1 mx-2 sm:mx-4 bg-zinc-200"></div>
+              <div class="flex items-center gap-2">
+                <div id="indicator-step-4" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold bg-neutral-100 text-neutral-500 border border-neutral-300 transition-all">
+                  4
+                </div>
+                <span class="hidden sm:inline text-xs font-medium text-zinc-800">Potwierdzenie</span>
+              </div>
+            </div>
+
+            <!-- STEP 1: STYL & OPIS -->
+            <div id="wizard-step-1" class="space-y-6">
+              
+              <div>
+                <label class="block text-sm font-medium text-zinc-900 mb-2">1. Wybierz styl tatuażu lub usługę:</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  
+                  <button type="button" class="service-choice-card p-4 rounded-2xl border border-neutral-200 text-left transition-all hover:border-black" data-service="Fineline & Botanika">
+                    <div class="font-medium text-sm text-zinc-900">Fineline & Botanika</div>
+                    <div class="text-xs text-zinc-500 font-light mt-0.5">Delikatne kwiaty, cienka igła</div>
+                  </button>
+
+                  <button type="button" class="service-choice-card p-4 rounded-2xl border border-neutral-200 text-left transition-all hover:border-black" data-service="Lettering & Kaligrafia">
+                    <div class="font-medium text-sm text-zinc-900">Lettering & Kaligrafia</div>
+                    <div class="text-xs text-zinc-500 font-light mt-0.5">Napisy, sentencje, cytaty</div>
+                  </button>
+
+                  <button type="button" class="service-choice-card p-4 rounded-2xl border border-neutral-200 text-left transition-all hover:border-black" data-service="Minimalizm & Spine Tattoo">
+                    <div class="font-medium text-sm text-zinc-900">Minimalizm & Spine</div>
+                    <div class="text-xs text-zinc-500 font-light mt-0.5">Kręgosłup, symbole, gwiazdy</div>
+                  </button>
+
+                  <button type="button" class="service-choice-card p-4 rounded-2xl border border-neutral-200 text-left transition-all hover:border-black" data-service="Profesjonalny Piercing">
+                    <div class="font-medium text-sm text-zinc-900">Profesjonalny Piercing</div>
+                    <div class="text-xs text-zinc-500 font-light mt-0.5">Uszy, nos, tytan medyczny</div>
+                  </button>
+
+                  <button type="button" class="service-choice-card p-4 rounded-2xl border border-neutral-200 text-left transition-all hover:border-black sm:col-span-2 lg:col-span-2" data-service="Konsultacja i Projekt">
+                    <div class="font-medium text-sm text-zinc-900">Konsultacja & Projekt Indywidualny</div>
+                    <div class="text-xs text-zinc-500 font-light mt-0.5">Wspólne omówienie wzoru i doboru miejsca</div>
+                  </button>
+
+                </div>
+              </div>
+
+              <!-- Placement -->
+              <div>
+                <label for="wizard-placement" class="block text-sm font-medium text-zinc-900 mb-1">
+                  2. Miejsce na ciele (np. przedramię, żeberka, kręgosłup, kostka):
+                </label>
+                <input type="text" id="wizard-placement" placeholder="np. Wewnętrzna strona przedramienia lub kręgosłup" class="w-full px-4 py-3 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black transition-colors">
+              </div>
+
+              <!-- Description -->
+              <div>
+                <label for="wizard-desc" class="block text-sm font-medium text-zinc-900 mb-1">
+                  3. Opisz swój pomysł / oczekiwania: <span class="text-red-500">*</span>
+                </label>
+                <textarea id="wizard-desc" rows="3" placeholder="Opisz motyw, przybliżone wymiary w cm lub jakiekolwiek szczególne życzenia..." class="w-full px-4 py-3 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black transition-colors"></textarea>
+              </div>
+
+              <!-- Image Inspiration Upload with Canvas compression -->
+              <div>
+                <label class="block text-sm font-medium text-zinc-900 mb-1">
+                  4. Załącz zdjęcie inspiracji (opcjonalnie):
+                </label>
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                  <label class="cursor-pointer px-4 py-2.5 rounded-xl border border-zinc-300 hover:border-black bg-zinc-50 hover:bg-zinc-100 text-xs font-medium text-zinc-800 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-zinc-600"></i> Wybierz plik ze zdjęciem
+                    <input type="file" id="wizard-image-input" accept="image/*" class="hidden">
+                  </label>
+                  <span class="text-xs text-zinc-400 font-light">Zdjęcie zostanie automatycznie zoptymalizowane w pamięci.</span>
+                </div>
+
+                <div id="wizard-image-preview" class="hidden mt-3 flex items-center gap-3 p-3 rounded-xl border border-zinc-200 bg-zinc-50 max-w-sm">
+                  <img id="wizard-preview-img" src="" alt="Podgląd inspiracji" class="w-14 h-14 rounded-lg object-cover border border-zinc-300">
+                  <div class="flex-1 text-xs">
+                    <div class="font-medium text-zinc-900">Zdjęcie załączone</div>
+                    <div class="text-zinc-500">Gotowe do wysłania</div>
+                  </div>
+                  <button type="button" id="wizard-remove-img" class="text-xs text-red-500 hover:text-red-700 p-1">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="pt-4 flex justify-end">
+                <button type="button" id="step-1-next" class="px-7 py-3 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium tracking-wide transition-all">
+                  Przejdź do wyboru terminu →
+                </button>
+              </div>
+
+            </div>
+
+            <!-- STEP 2: KALENDARZ & GODZINY -->
+            <div id="wizard-step-2" class="hidden space-y-6">
+              
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: Calendar Grid -->
+                <div class="md:col-span-7 space-y-4">
+                  
+                  <div class="flex items-center justify-between">
+                    <h3 id="cal-month-label" class="font-heading font-medium text-base text-zinc-900">Miesiąc Rok</h3>
+                    <div class="flex items-center gap-1.5">
+                      <button type="button" id="cal-prev-month" aria-label="Poprzedni miesiąc" class="w-8 h-8 rounded-lg border border-zinc-200 hover:border-black flex items-center justify-center text-xs text-zinc-700 transition-colors">
+                        <i class="fa-solid fa-chevron-left"></i>
+                      </button>
+                      <button type="button" id="cal-next-month" aria-label="Następny miesiąc" class="w-8 h-8 rounded-lg border border-zinc-200 hover:border-black flex items-center justify-center text-xs text-zinc-700 transition-colors">
+                        <i class="fa-solid fa-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Days Header -->
+                  <div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-zinc-400 uppercase tracking-wider py-1">
+                    <div>Pn</div><div>Wt</div><div>Śr</div><div>Cz</div><div>Pt</div><div>Sb</div><div>Nd</div>
+                  </div>
+
+                  <!-- Days Grid -->
+                  <div id="cal-days-grid" class="grid grid-cols-7 gap-1 text-center">
+                    <!-- Injected via JavaScript -->
+                  </div>
+
+                  <div class="text-[11px] text-zinc-400 font-light flex items-center gap-3 pt-2">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-zinc-900 inline-block"></span> Rezerwacje w studiu</span>
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded bg-zinc-100 border border-zinc-300 inline-block"></span> Niedziele (zamknięte)</span>
+                  </div>
+
+                </div>
+
+                <!-- Right: Hours Slot Selection -->
+                <div class="md:col-span-5 space-y-4 border-t md:border-t-0 md:border-l border-zinc-100 md:pl-8 pt-4 md:pt-0">
+                  <div id="selected-date-label" class="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                    Wybierz dzień w kalendarzu
+                  </div>
+                  <div class="text-xs text-zinc-500 font-light">
+                    Dostępne godziny sesji zgodnie z harmonogramem:
+                  </div>
+
+                  <div id="time-slots-container" class="grid grid-cols-1 gap-2.5 pt-1">
+                    <div class="text-xs text-zinc-400 italic p-4 rounded-xl border border-dashed border-zinc-200 text-center">
+                      Zaznacz dzień po lewej stronie, aby wyświetlić wolne sloty.
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Buttons -->
+              <div class="pt-6 border-t border-zinc-100 flex items-center justify-between">
+                <button type="button" id="step-2-back" class="px-5 py-2.5 rounded-full border border-zinc-300 text-xs font-medium text-zinc-700 hover:border-black transition-all">
+                  ← Wstecz
+                </button>
+                <button type="button" id="step-2-next" class="px-7 py-3 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium tracking-wide transition-all">
+                  Przejdź do danych kontaktowych →
+                </button>
+              </div>
+
+            </div>
+
+            <!-- STEP 3: DANE KONTAKTOWE -->
+            <div id="wizard-step-3" class="hidden space-y-6">
+              
+              <div class="max-w-xl mx-auto space-y-4">
+                <h3 class="font-heading font-medium text-base text-zinc-900 text-center mb-6">
+                  Podaj dane kontaktowe do potwierdzenia wizyty
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label for="client-first-name" class="block text-xs font-medium text-zinc-700 mb-1">Imię <span class="text-red-500">*</span></label>
+                    <input type="text" id="client-first-name" placeholder="Twoje imię" class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black transition-colors">
+                  </div>
+                  <div>
+                    <label for="client-last-name" class="block text-xs font-medium text-zinc-700 mb-1">Nazwisko <span class="text-red-500">*</span></label>
+                    <input type="text" id="client-last-name" placeholder="Twoje nazwisko" class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black transition-colors">
+                  </div>
+                </div>
+
+                <div>
+                  <label for="client-email" class="block text-xs font-medium text-zinc-700 mb-1">Adres e-mail <span class="text-red-500">*</span></label>
+                  <input type="email" id="client-email" placeholder="twoj.email@example.com" class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black transition-colors">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-medium text-zinc-700 mb-1">Numer telefonu <span class="text-red-500">*</span></label>
+                  <div class="flex gap-2">
+                    <select id="client-country-code" class="px-3 py-2.5 rounded-xl border border-zinc-200 bg-white text-xs font-medium focus:outline-none focus:border-black">
+                      <option value="+48">🇵🇱 +48 (PL)</option>
+                      <option value="+44">🇬🇧 +44 (UK)</option>
+                      <option value="+49">🇩🇪 +49 (DE)</option>
+                      <option value="+43">🇦🇹 +43 (AT)</option>
+                      <option value="+31">🇳🇱 +31 (NL)</option>
+                      <option value="+1">🇺🇸 +1 (US)</option>
+                    </select>
+                    <input type="tel" id="client-phone" placeholder="np. 500 123 456" class="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black transition-colors">
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Buttons -->
+              <div class="pt-6 border-t border-zinc-100 flex items-center justify-between">
+                <button type="button" id="step-3-back" class="px-5 py-2.5 rounded-full border border-zinc-300 text-xs font-medium text-zinc-700 hover:border-black transition-all">
+                  ← Wstecz
+                </button>
+                <button type="button" id="step-3-next" class="px-7 py-3 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium tracking-wide transition-all">
+                  Przejdź do podsumowania →
+                </button>
+              </div>
+
+            </div>
+
+            <!-- STEP 4: PODSUMOWANIE & WYSŁANIE -->
+            <div id="wizard-step-4" class="hidden space-y-6">
+              
+              <div class="max-w-xl mx-auto space-y-5">
+                <h3 class="font-heading font-medium text-base text-zinc-900 text-center">
+                  Sprawdź poprawność danych rezerwacji
+                </h3>
+
+                <div class="p-6 rounded-2xl border border-zinc-200 bg-zinc-50/70 space-y-3.5 text-sm font-light">
+                  <div class="flex justify-between border-b border-zinc-200/60 pb-2">
+                    <span class="text-zinc-500">Wybrana usługa:</span>
+                    <span id="summary-service" class="font-medium text-zinc-900">-</span>
+                  </div>
+                  <div class="flex justify-between border-b border-zinc-200/60 pb-2">
+                    <span class="text-zinc-500">Miejsce na ciele:</span>
+                    <span id="summary-placement" class="font-medium text-zinc-900">-</span>
+                  </div>
+                  <div class="flex justify-between border-b border-zinc-200/60 pb-2">
+                    <span class="text-zinc-500">Termin i godzina:</span>
+                    <span id="summary-datetime" class="font-medium text-zinc-900">-</span>
+                  </div>
+                  <div class="flex justify-between border-b border-zinc-200/60 pb-2">
+                    <span class="text-zinc-500">Klient:</span>
+                    <span id="summary-name" class="font-medium text-zinc-900">-</span>
+                  </div>
+                  <div class="flex justify-between border-b border-zinc-200/60 pb-2">
+                    <span class="text-zinc-500">Kontakt:</span>
+                    <span id="summary-contact" class="font-medium text-zinc-900">-</span>
+                  </div>
+                  <div class="pt-1">
+                    <span class="text-zinc-500 block text-xs">Opis koncepcji:</span>
+                    <p id="summary-desc" class="text-zinc-800 text-xs mt-1 bg-white p-3 rounded-lg border border-zinc-200 font-normal">-</p>
+                  </div>
+                  
+                  <div id="summary-img-container" class="hidden pt-2">
+                    <span class="text-zinc-500 block text-xs mb-1">Załączona inspiracja:</span>
+                    <img id="summary-img" src="" alt="Miniatura" class="w-20 h-20 rounded-lg object-cover border border-zinc-300">
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-2.5 text-xs text-zinc-600">
+                  <input type="checkbox" id="summary-consent" class="mt-0.5 rounded border-zinc-300 text-zinc-900 focus:ring-0">
+                  <label for="summary-consent" class="font-light">
+                    Oświadczam, że zapoznałem/-am się z <a href="javascript:void(0)" onclick="openPrivacyModal()" class="underline font-normal text-zinc-900">polityką prywatności</a> oraz wyrażam zgodę na kontakt w celu potwierdzenia terminu sesji.
+                  </label>
+                </div>
+
+              </div>
+
+              <!-- Buttons -->
+              <div class="pt-6 border-t border-zinc-100 flex items-center justify-between">
+                <button type="button" id="step-4-back" class="px-5 py-2.5 rounded-full border border-zinc-300 text-xs font-medium text-zinc-700 hover:border-black transition-all">
+                  ← Wstecz
+                </button>
+                <button type="button" id="step-4-confirm" class="px-8 py-3 rounded-full bg-zinc-900 hover:bg-black text-white text-xs font-medium tracking-wide shadow-sm hover:shadow transition-all">
+                  Potwierdź i Wyślij Rezerwację ✓
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           9. OPINIE Z GOOGLE (TESTIMONIALS)
+           ================================================================= -->
+      <section id="testimonials" class="py-20 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="max-w-2xl mx-auto text-center space-y-3 mb-16 fade-up">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/60 text-amber-800 text-xs font-medium">
+              <i class="fa-solid fa-star text-amber-500"></i> Średnia ocen 5.0 w Google (93 opinie)
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900">
+              Co mówią o nas klientki?
+            </h2>
+            <p class="text-sm text-zinc-600 font-light">
+              Prawdziwe doświadczenia osób, które powierzyły nam swoje tatuaże oraz piercing w Nowym Sączu.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Review 1: Oliwia Pałac -->
+            <div class="card-clean rounded-2xl p-6 sm:p-7 space-y-4 fade-up flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex text-amber-400 text-xs gap-1">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                  „Z całego serca polecam! ❤️ Miałam tutaj wykonywane 3 tatuaże oraz 2 kolczyki i za każdym razem wychodziłam zachwycona. Atmosfera jest niesamowita — pełen profesjonalizm, ogromna dbałość o higienę i przede wszystkim podejście do klienta na najwyższym poziomie.”
+                </p>
+              </div>
+              <div class="pt-4 border-t border-zinc-100 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-medium text-zinc-900">oliwia palac</div>
+                  <div class="text-[11px] text-zinc-400">Lokalny przewodnik • Google</div>
+                </div>
+                <span class="text-[11px] text-zinc-400">5 mies. temu</span>
+              </div>
+            </div>
+
+            <!-- Review 2: Kasia Oleksy -->
+            <div class="card-clean rounded-2xl p-6 sm:p-7 space-y-4 fade-up flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex text-amber-400 text-xs gap-1">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                  „Patrycja to niesamowicie utalentowana tatuażystka z ogromnym wyczuciem i pasją do tego, co robi ❤️ Każdy projekt wykonuje z pełnym zaangażowaniem, dbałością o szczegóły i profesjonalnym podejściem. Do tego tworzy świetną atmosferę w studio!”
+                </p>
+              </div>
+              <div class="pt-4 border-t border-zinc-100 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-medium text-zinc-900">kasia oleksy</div>
+                  <div class="text-[11px] text-zinc-400">Klientka studia • Google</div>
+                </div>
+                <span class="text-[11px] text-zinc-400">5 mies. temu</span>
+              </div>
+            </div>
+
+            <!-- Review 3: Nadia Budzyn -->
+            <div class="card-clean rounded-2xl p-6 sm:p-7 space-y-4 fade-up flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex text-amber-400 text-xs gap-1">
+                  <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-xs text-zinc-600 font-light leading-relaxed">
+                  „Z całego serca polecam tę tatuatorkę! Atmosfera w studio bardzo przyjazna i komfortowa. Widać ogromną pasję, precyzję i dbałość o każdy, nawet najmniejszy detal. Tatuaż wyszedł świetnie, dokładnie tak, jak sobie wymarzyłam. Na pewno jeszcze wrócę!”
+                </p>
+              </div>
+              <div class="pt-4 border-t border-zinc-100 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-medium text-zinc-900">Nadia Budzyn</div>
+                  <div class="text-[11px] text-zinc-400">Klientka studia • Google</div>
+                </div>
+                <span class="text-[11px] text-zinc-400">5 mies. temu</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           10. FAQ SECTION (AKORDEON)
+           ================================================================= -->
+      <section id="faq" class="py-20 sm:py-24 border-t border-zinc-100 bg-zinc-50/40">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="text-center space-y-3 mb-16 fade-up">
+            <span class="text-xs uppercase tracking-widest font-medium text-zinc-500">Wskazówki & Odpowiedzi</span>
+            <h2 class="text-3xl sm:text-4xl font-heading font-light text-zinc-900">
+              Często zadawane pytania
+            </h2>
+            <p class="text-sm text-zinc-600 font-light">
+              Dowiedz się wszystkiego o przygotowaniu do sesji, pielęgnacji i higienie.
+            </p>
+          </div>
+
+          <div class="space-y-3.5 fade-up">
+            
+            <div class="faq-item card-clean rounded-2xl overflow-hidden">
+              <button type="button" class="faq-trigger w-full p-5 text-left flex items-center justify-between gap-4">
+                <span class="font-medium text-sm text-zinc-900">Jak przygotować się do sesji tatuażu fineline?</span>
+                <i class="fa-solid fa-chevron-down text-xs text-zinc-400 faq-icon transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-xs text-zinc-600 font-light leading-relaxed border-t border-zinc-100 pt-3">
+                W przeddzień sesji nawadniaj organizm, unikaj alkoholu i zadbaj o dobry sen. W dniu tatuażu zjedz pożywny posiłek. Na sesję załóż luźne, wygodne ubranie, które umożliwi swobodny dostęp do tatuowanego miejsca.
+              </div>
+            </div>
+
+            <div class="faq-item card-clean rounded-2xl overflow-hidden">
+              <button type="button" class="faq-trigger w-full p-5 text-left flex items-center justify-between gap-4">
+                <span class="font-medium text-sm text-zinc-900">Czy tatuaże wykonane cienką igłą (fineline) zachowują estetykę po latach?</span>
+                <i class="fa-solid fa-chevron-down text-xs text-zinc-400 faq-icon transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-xs text-zinc-600 font-light leading-relaxed border-t border-zinc-100 pt-3">
+                Tak! Kluczem jest odpowiednia głębokość wprowadzenia pigmentu oraz prawidłowa pielęgnacja w pierwszych 2-3 tygodniach. Cienka linia fineline goi się szybko i subtelnie wtapia w naturalną teksturę skóry.
+              </div>
+            </div>
+
+            <div class="faq-item card-clean rounded-2xl overflow-hidden">
+              <button type="button" class="faq-trigger w-full p-5 text-left flex items-center justify-between gap-4">
+                <span class="font-medium text-sm text-zinc-900">Z jakich materiałów wykonana jest biżuteria do piercingu?</span>
+                <i class="fa-solid fa-chevron-down text-xs text-zinc-400 faq-icon transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-xs text-zinc-600 font-light leading-relaxed border-t border-zinc-100 pt-3">
+                W naszym studiu stosujemy wyłącznie certyfikowany tytan medyczny klasy implantacyjnej (G23), który jest w 100% hipoalergiczny i wolny od niklu. Zapewnia to najszybsze i w pełni bezpieczne gojenie.
+              </div>
+            </div>
+
+            <div class="faq-item card-clean rounded-2xl overflow-hidden">
+              <button type="button" class="faq-trigger w-full p-5 text-left flex items-center justify-between gap-4">
+                <span class="font-medium text-sm text-zinc-900">Czy mogę przynieść własny pomysł lub szkic?</span>
+                <i class="fa-solid fa-chevron-down text-xs text-zinc-400 faq-icon transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-xs text-zinc-600 font-light leading-relaxed border-t border-zinc-100 pt-3">
+                Oczywiście! Możesz wgrać swoje inspiracje w naszym formularzu rezerwacji online. Patrycja przygotuje na tej podstawie spersonalizowany, dopracowany projekt skrojony pod Twoje preferencje.
+              </div>
+            </div>
+
+            <div class="faq-item card-clean rounded-2xl overflow-hidden">
+              <button type="button" class="faq-trigger w-full p-5 text-left flex items-center justify-between gap-4">
+                <span class="font-medium text-sm text-zinc-900">Co w przypadku, gdy muszę przełożyć zarezerwowany termin?</span>
+                <i class="fa-solid fa-chevron-down text-xs text-zinc-400 faq-icon transition-transform duration-300"></i>
+              </button>
+              <div class="faq-content hidden px-5 pb-5 text-xs text-zinc-600 font-light leading-relaxed border-t border-zinc-100 pt-3">
+                Wystarczy powiadomić nas telefonicznie (575 868 494) lub mailowo minimum 48 godzin przed planowaną wizytą. Wspólnie znajdziemy nowy, dogodny termin w kalendarzu.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================
+           11. KONTAKT & STOPKA (FOOTER)
+           ================================================================= -->
+      <footer id="contact" class="border-t border-zinc-200 bg-white pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-zinc-100">
+            
+            <!-- Col 1: Studio info -->
+            <div class="space-y-4">
+              <div class="flex items-center gap-3">
+                <img src="logo.png" alt="Pat Tattoo Logo" class="w-10 h-10 rounded-full object-cover border border-zinc-300">
+                <span class="font-heading font-medium text-lg text-zinc-900">Pat Tattoo</span>
+              </div>
+              <p class="text-xs text-zinc-500 font-light leading-relaxed">
+                Autorskie studio tatuażu fineline, mikrotatuażu, kaligrafii oraz bezpiecznego piercingu w Nowym Sączu.
+              </p>
+              <div class="pt-1">
+                <a href="https://www.instagram.com/pat.tattooo/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-medium text-zinc-800 hover:text-black">
+                  <i class="fa-brands fa-instagram text-sm"></i> @pat.tattooo
+                </a>
+              </div>
+            </div>
+
+            <!-- Col 2: Lokalizacja i Kontakt -->
+            <div class="space-y-3">
+              <h4 class="text-xs uppercase tracking-widest font-semibold text-zinc-900">Adres & Kontakt</h4>
+              <p class="text-xs text-zinc-600 font-light">
+                ul. Lwowska 38/3<br>
+                33-300 Nowy Sącz
+              </p>
+              <p class="text-xs text-zinc-600 font-light">
+                Telefon: <a href="tel:575868494" class="text-zinc-900 font-normal hover:underline">575 868 494</a><br>
+                E-mail: <a href="mailto:patpoczta64@gmail.com" class="text-zinc-900 font-normal hover:underline">patpoczta64@gmail.com</a>
+              </p>
+            </div>
+
+            <!-- Col 3: Godziny Otwarcia -->
+            <div class="space-y-3">
+              <h4 class="text-xs uppercase tracking-widest font-semibold text-zinc-900">Godziny Pracy</h4>
+              <div class="text-xs text-zinc-600 font-light space-y-1">
+                <div>Poniedziałek – Piątek: <span class="text-zinc-900 font-normal">10:00 – 18:00</span></div>
+                <div>Sobota: <span class="text-zinc-900 font-normal">10:00 – 14:00</span></div>
+                <div>Niedziela: <span class="text-zinc-400">Zamknięte</span></div>
+              </div>
+            </div>
+
+            <!-- Col 4: Szybkie Linki & Panel -->
+            <div class="space-y-3">
+              <h4 class="text-xs uppercase tracking-widest font-semibold text-zinc-900">Informacje</h4>
+              <div class="flex flex-col space-y-2 text-xs text-zinc-600 font-light">
+                <a href="javascript:void(0)" onclick="openPrivacyModal()" class="hover:text-zinc-950">Polityka prywatności & RODO</a>
+                <a href="#rezerwacja" class="hover:text-zinc-950">Rezerwacja online</a>
+                <a href="#portfolio" class="hover:text-zinc-950">Portfolio prac</a>
+                <a href="#admin" class="text-zinc-400 hover:text-zinc-800 transition-colors pt-2">
+                  <i class="fa-solid fa-lock text-[10px] mr-1"></i> Logowanie do Panelu Studia
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-zinc-400 font-light">
+            <div>
+              &copy; 2026 Pat Tattoo Nowy Sącz. Wszelkie prawa zastrzeżone.
+            </div>
+            <div>
+              Projekt i wdrożenie: Minimalist Studio Design
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+    </div>
+    <!-- END MAIN SITE VIEW -->
+
+    <!-- =================================================================
+         12. PANEL STUDIA / ADMINISTRATORA (#admin VIEW)
+         ================================================================= -->
+    <div id="admin-view-container" class="hidden min-h-screen bg-zinc-50 py-10 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-zinc-200">
+          <div class="flex items-center gap-3">
+            <a href="#" class="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 hover:border-black transition-colors" title="Wróć na stronę">
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div>
+              <h1 class="text-2xl font-heading font-medium text-zinc-900">Panel Studia • Pat Tattoo</h1>
+              <p class="text-xs text-zinc-500 font-light">Zarządzanie wizytami, terminami i zgłoszeniami klientek</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="#" class="px-4 py-2 rounded-xl border border-zinc-300 bg-white text-xs font-medium text-zinc-700 hover:border-black transition-all">
+              Podgląd Strony Głównej
+            </a>
+            <button type="button" id="admin-logout-btn" class="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-medium transition-all">
+              Wyloguj się
+            </button>
+          </div>
+        </div>
+
+        <!-- LOGIN BOX (Jeśli niezalogowany) -->
+        <div id="admin-login-box" class="max-w-md mx-auto card-clean rounded-3xl p-8 space-y-6">
+          <div class="text-center space-y-2">
+            <div class="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center text-zinc-900 mx-auto text-lg">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-xl font-heading font-medium text-zinc-900">Dostęp do Panelu Studia</h2>
+            <p class="text-xs text-zinc-500 font-light">Zaloguj się, aby zarządzać rezerwacjami.</p>
+          </div>
+
+          <form id="admin-login-form" class="space-y-4">
+            <div>
+              <label for="admin-email" class="block text-xs font-medium text-zinc-700 mb-1">E-mail administratora</label>
+              <input type="email" id="admin-email" value="admin@pattattoo.pl" class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black">
+            </div>
+            <div>
+              <label for="admin-password" class="block text-xs font-medium text-zinc-700 mb-1">Hasło</label>
+              <input type="password" id="admin-password" value="admin123" class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:border-black">
+            </div>
+            <button type="submit" class="w-full py-3 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-medium tracking-wide transition-all">
+              Zaloguj się do Panelu
+            </button>
+          </form>
+
+          <div class="pt-2 text-center">
+            <button type="button" id="fill-demo-creds" class="text-xs text-zinc-500 hover:text-zinc-900 underline font-light">
+              Kliknij tutaj, aby uzupełnić dane demonstracyjne (admin@pattattoo.pl / admin123)
+            </button>
+          </div>
+        </div>
+
+        <!-- DASHBOARD CONTENT (Jeśli zalogowany) -->
+        <div id="admin-dashboard-content" class="hidden space-y-8">
+          
+          <!-- Stat Counters -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="card-clean rounded-2xl p-5">
+              <div class="text-xs text-zinc-500 uppercase tracking-wider">Wszystkie zgłoszenia</div>
+              <div id="stat-total" class="text-2xl font-heading font-medium text-zinc-900 mt-1">0</div>
+            </div>
+            <div class="card-clean rounded-2xl p-5">
+              <div class="text-xs text-zinc-500 uppercase tracking-wider">Wizyty Aktywne</div>
+              <div id="stat-active" class="text-2xl font-heading font-medium text-zinc-900 mt-1">0</div>
+            </div>
+            <div class="card-clean rounded-2xl p-5">
+              <div class="text-xs text-zinc-500 uppercase tracking-wider">Zrealizowane</div>
+              <div id="stat-completed" class="text-2xl font-heading font-medium text-zinc-900 mt-1">0</div>
+            </div>
+            <div class="card-clean rounded-2xl p-5">
+              <div class="text-xs text-zinc-500 uppercase tracking-wider">Anulowane</div>
+              <div id="stat-cancelled" class="text-2xl font-heading font-medium text-zinc-900 mt-1">0</div>
+            </div>
+          </div>
+
+          <!-- Active Visits Table -->
+          <div class="card-clean rounded-3xl p-6 sm:p-8 space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-heading font-medium text-lg text-zinc-900">Aktualne Rezerwacje (Wymagające realizacji)</h3>
+              <span class="text-xs text-zinc-400 font-light">Dane z synchronizacji lokalnej</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-zinc-200 text-zinc-400 uppercase tracking-wider">
+                    <th class="py-3 px-3">Kod</th>
+                    <th class="py-3 px-3">Klientka</th>
+                    <th class="py-3 px-3">Usługa & Miejsce</th>
+                    <th class="py-3 px-3">Termin</th>
+                    <th class="py-3 px-3">Inspiracja</th>
+                    <th class="py-3 px-3 text-right">Akcje</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-active-tbody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="card-clean rounded-3xl p-6 sm:p-8 space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-heading font-medium text-lg text-zinc-900">Historia Wizyt (Zrealizowane i Anulowane)</h3>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-zinc-200 text-zinc-400 uppercase tracking-wider">
+                    <th class="py-3 px-3">Kod</th>
+                    <th class="py-3 px-3">Klientka</th>
+                    <th class="py-3 px-3">Usługa</th>
+                    <th class="py-3 px-3">Data</th>
+                    <th class="py-3 px-3">Status</th>
+                    <th class="py-3 px-3 text-right">Opcje</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-history-tbody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =================================================================
+       MODALS SYSTEM
+       ================================================================= -->
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <button type="button" id="lightbox-close" class="absolute top-6 right-6 text-white text-2xl hover:opacity-75 transition-opacity" aria-label="Zamknij">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <button type="button" id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all" aria-label="Poprzednie">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button type="button" id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all" aria-label="Następne">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <div class="max-w-3xl w-full text-center space-y-4">
+      <div class="max-h-[75vh] flex items-center justify-center">
+        <img id="lightbox-img" src="" alt="Powiększenie pracy" class="max-h-[75vh] max-w-full rounded-2xl object-contain shadow-2xl">
+      </div>
+      <div class="text-white space-y-1">
+        <div id="lightbox-category" class="text-xs uppercase tracking-widest text-zinc-400 font-light"></div>
+        <h3 id="lightbox-title" class="font-heading text-lg font-medium"></h3>
+        <p id="lightbox-desc" class="text-xs text-zinc-300 font-light max-w-lg mx-auto"></p>
+        <div id="lightbox-counter" class="text-xs text-zinc-500 pt-1 font-mono"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo Bar Contact Modal -->
+  <div id="demo-contact-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="max-w-md w-full card-clean rounded-3xl p-6 sm:p-8 space-y-6 relative bg-white">
+      <button type="button" onclick="closeDemoContactModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-black">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center text-zinc-900 mx-auto text-xl">
+          <i class="fa-regular fa-envelope"></i>
+        </div>
+        <h3 class="font-heading font-medium text-lg text-zinc-900">Kontakt w sprawie strony</h3>
+        <p class="text-xs text-zinc-500 font-light">
+          Ta strona to autorski projekt demonstracyjny przygotowany dla Pat Tattoo.
+        </p>
+      </div>
+
+      <div class="p-4 rounded-2xl border border-zinc-200 bg-zinc-50 space-y-2 break-all text-center">
+        <div class="text-xs text-zinc-400">Bezpośredni kontakt do twórcy:</div>
+        <div class="text-sm font-medium text-zinc-900 select-all">kacperekwas1@gmail.com</div>
+      </div>
+
+      <div class="flex gap-2">
+        <button type="button" onclick="copyDemoEmail()" class="flex-1 py-2.5 rounded-xl border border-zinc-300 hover:border-black text-xs font-medium text-zinc-800 transition-all">
+          Kopiuj e-mail
+        </button>
+        <a href="mailto:kacperekwas1@gmail.com?subject=Zapytanie%20o%20stron%C4%99%20Pat%20Tattoo" class="flex-1 py-2.5 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-medium text-center transition-all">
+          Napisz wiadomość
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Alert Modal (Brak standardowego alert()) -->
+  <div id="custom-alert-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="max-w-sm w-full card-clean rounded-3xl p-6 space-y-4 bg-white text-center">
+      <h4 id="custom-alert-title" class="font-heading font-medium text-base text-zinc-900">Powiadomienie</h4>
+      <p id="custom-alert-msg" class="text-xs text-zinc-600 font-light leading-relaxed"></p>
+      <button type="button" id="custom-alert-ok" class="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-medium transition-all">
+        Rozumiem
+      </button>
+    </div>
+  </div>
+
+  <!-- Custom Confirm Modal (Brak standardowego confirm()) -->
+  <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="max-w-sm w-full card-clean rounded-3xl p-6 space-y-4 bg-white text-center">
+      <h4 id="custom-confirm-title" class="font-heading font-medium text-base text-zinc-900">Potwierdzenie</h4>
+      <p id="custom-confirm-msg" class="text-xs text-zinc-600 font-light leading-relaxed"></p>
+      <div class="flex gap-2 pt-2">
+        <button type="button" id="custom-confirm-no" class="flex-1 py-2.5 rounded-xl border border-zinc-300 text-xs font-medium text-zinc-700 hover:border-black">
+          Anuluj
+        </button>
+        <button type="button" id="custom-confirm-yes" class="flex-1 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-medium hover:bg-black">
+          Tak, kontynuuj
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacy-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="max-w-2xl w-full card-clean rounded-3xl p-6 sm:p-8 space-y-4 max-h-[85vh] overflow-y-auto bg-white">
+      <div class="flex items-center justify-between pb-3 border-b border-zinc-100">
+        <h3 class="font-heading font-medium text-lg text-zinc-900">Polityka Prywatności i RODO</h3>
+        <button type="button" onclick="closePrivacyModal()" class="text-zinc-400 hover:text-black">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs text-zinc-600 font-light leading-relaxed">
+        <p><strong>1. Administrator Danych:</strong> Administratorem danych osobowych jest Pat Tattoo, z siedzibą przy ul. Lwowska 38/3, 33-300 Nowy Sącz.</p>
+        <p><strong>2. Zakres zbierania danych:</strong> Dane wprowadzane w formularzu rezerwacyjnym (imię, nazwisko, telefon, e-mail, opis wzoru, załączona fotografia) są przetwarzane wyłącznie w celu koordynacji terminu wizyty i konsultacji tatuażu lub piercingu.</p>
+        <p><strong>3. Przechowywanie danych:</strong> W wersji demonstracyjnej dane rezerwacji są zapisywane w pamięci lokalnej Twojej przeglądarki (localStorage) i nie są przekazywane podmiotom trzecim.</p>
+        <p><strong>4. Prawa klienta:</strong> Masz pełne prawo do wglądu, sprostowania oraz żądania usunięcia swoich danych kontaktowych w dowolnym momencie.</p>
+      </div>
+      <div class="pt-4 border-t border-zinc-100 text-right">
+        <button type="button" onclick="closePrivacyModal()" class="px-5 py-2 rounded-xl bg-zinc-900 text-white text-xs font-medium">
+          Zamknij
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Booking Modal -->
+  <div id="success-booking-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="max-w-md w-full card-clean rounded-3xl p-7 text-center space-y-5 bg-white">
+      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <div class="space-y-1">
+        <h3 class="font-heading font-medium text-xl text-zinc-900">Rezerwacja Złożona!</h3>
+        <p class="text-xs text-zinc-500 font-light">Dziękujemy. Twoje zgłoszenie zostało pomyślnie zarejestrowane.</p>
+      </div>
+
+      <div class="p-4 rounded-2xl border border-zinc-200 bg-zinc-50 text-left space-y-2 text-xs">
+        <div class="flex justify-between">
+          <span class="text-zinc-500">Twój kod wizyty:</span>
+          <span id="success-booking-code" class="font-semibold text-zinc-900 font-mono"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-zinc-500">Wybrany termin:</span>
+          <span id="success-booking-date" class="font-medium text-zinc-800"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-zinc-500">Usługa:</span>
+          <span id="success-booking-service" class="font-medium text-zinc-800"></span>
+        </div>
+      </div>
+
+      <div class="space-y-2 pt-2">
+        <button type="button" id="success-modal-admin-btn" class="w-full py-3 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-medium transition-all">
+          Zobacz w Panelu Studia (Demo) →
+        </button>
+        <button type="button" id="success-modal-close" class="w-full py-2.5 rounded-xl border border-zinc-200 hover:border-black text-xs font-medium text-zinc-700 transition-all">
+          Wróć do strony głównej
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Image Preview Modal -->
+  <div id="admin-insp-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="max-w-lg w-full card-clean rounded-3xl p-6 space-y-4 bg-white">
+      <div class="flex items-center justify-between pb-2 border-b border-zinc-100">
+        <h4 class="font-heading font-medium text-sm text-zinc-900">Załączona Inspiracja Klienta</h4>
+        <button type="button" id="admin-insp-close" class="text-zinc-400 hover:text-black">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="max-h-80 overflow-hidden rounded-xl border border-zinc-200 flex items-center justify-center bg-zinc-50">
+        <img id="admin-insp-img" src="" alt="Inspiracja" class="max-h-80 max-w-full object-contain">
+      </div>
+      <div id="admin-insp-info" class="text-xs text-zinc-600 font-light"></div>
+    </div>
+  </div>
+
+  <!-- Cookie Banner -->
+  <div id="cookie-banner" class="hidden fixed bottom-5 left-5 right-5 sm:left-auto sm:right-6 sm:max-w-md z-40 card-clean rounded-2xl p-5 border border-zinc-300 bg-white/95 shadow-xl space-y-3">
+    <div class="flex items-start gap-3">
+      <div class="text-zinc-800 text-lg mt-0.5"><i class="fa-solid fa-cookie-bite"></i></div>
+      <div class="text-xs text-zinc-600 font-light leading-relaxed">
+        Używamy niezbędnych plików cookies, aby umożliwić działanie kalendarza rezerwacji i panelu studia. Możesz zaakceptować wszystkie lub tylko niezbędne.
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-2 pt-1">
+      <button type="button" id="cookie-settings" class="px-3 py-1.5 rounded-lg border border-zinc-200 hover:border-black text-[11px] font-medium text-zinc-700 transition-all">
+        Niezbędne
+      </button>
+      <button type="button" id="cookie-accept" class="px-4 py-1.5 rounded-lg bg-zinc-900 hover:bg-black text-white text-[11px] font-medium transition-all">
+        Akceptuję
+      </button>
+    </div>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
